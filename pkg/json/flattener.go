@@ -6,14 +6,20 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/saichandankadarla/appconfigguard/pkg/validator"
 )
 
 // Flattener handles JSON flattening and unflattening operations
-type Flattener struct{}
+type Flattener struct{
+	validator *validator.Validator
+}
 
 // NewFlattener creates a new JSON flattener instance
 func NewFlattener() *Flattener {
-	return &Flattener{}
+	return &Flattener{
+		validator: validator.NewValidator(),
+	}
 }
 
 // Flatten converts nested JSON into flat key/value pairs using dot notation
@@ -21,6 +27,24 @@ func (f *Flattener) Flatten(data interface{}) (map[string]string, error) {
 	result := make(map[string]string)
 	err := f.flattenRecursive(data, "", result)
 	return result, err
+}
+
+// FlattenAndValidate converts nested JSON into flat key/value pairs with validation
+func (f *Flattener) FlattenAndValidate(data interface{}) (map[string]string, []validator.ValidationError, error) {
+	result := make(map[string]string)
+	err := f.flattenRecursive(data, "", result)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Validate the flattened configuration
+	errors, validateErr := f.validator.ValidateConfiguration(result)
+	return result, errors, validateErr
+}
+
+// ValidateConfiguration validates a flattened configuration
+func (f *Flattener) ValidateConfiguration(config map[string]string) ([]validator.ValidationError, error) {
+	return f.validator.ValidateConfiguration(config)
 }
 
 // flattenRecursive recursively flattens nested structures

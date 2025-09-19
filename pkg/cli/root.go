@@ -13,6 +13,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ANSI color codes for terminal output
+const (
+	colorReset = "\033[0m"
+	colorYellow = "\033[33m"
+)
+
+// colorize adds ANSI color to text
+func colorize(text, color string) string {
+	return color + text + colorReset
+}
+
 var (
 	// Global flags
 	filePath    string
@@ -105,6 +116,21 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	localConfig, err := parseLocalConfig(filePath, jsonFlattener)
 	if err != nil {
 		return fmt.Errorf("failed to parse local config: %w", err)
+	}
+
+	// Validate configuration
+	validationErrors, err := jsonFlattener.ValidateConfiguration(localConfig)
+	if err != nil {
+		return fmt.Errorf("failed to validate config: %w", err)
+	}
+
+	// Display validation errors if any
+	if len(validationErrors) > 0 {
+		fmt.Println("⚠️  Configuration validation warnings:")
+		for _, validationErr := range validationErrors {
+			fmt.Printf("   %s: %s\n", colorize(validationErr.Key, colorYellow), validationErr.Message)
+		}
+		fmt.Println()
 	}
 
 	// Create Azure client and fetch remote config
