@@ -1,0 +1,23 @@
+{
+  "app": {
+    "name": "AppConfigGuard",
+    "version": "1.0.0",
+    "features": {
+      "diff": true,
+      "sync": true,
+      "atomic": true
+    }
+  },
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "credentials": {
+      "username": "admin",
+      "password": "secret"
+    }
+  },
+  "logging": {
+    "level": "info"
+  },
+  "features": ["authentication", "authorization", "audit"]
+}
