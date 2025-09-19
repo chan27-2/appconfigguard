@@ -107,7 +107,7 @@ func NewEngine() *Engine {
 }
 
 // Compare compares local configuration with remote configuration
-func (e *Engine) Compare(local map[string]string, remote []azure.ConfigItem) ([]Change, error) {
+func (e *Engine) Compare(local map[string]string, remote []azure.ConfigItem, strict bool) ([]Change, error) {
 	changes := []Change{}
 
 	// Create map of remote items for efficient lookup
@@ -142,15 +142,17 @@ func (e *Engine) Compare(local map[string]string, remote []azure.ConfigItem) ([]
 		}
 	}
 
-	// Any remaining items in remoteMap are deletions
-	for _, remoteItem := range remoteMap {
-		changes = append(changes, Change{
-			Type:     ChangeTypeDelete,
-			Key:      remoteItem.Key,
-			OldValue: remoteItem.Value,
-			Label:    remoteItem.Label,
-			Tags:     remoteItem.Tags,
-		})
+	// Any remaining items in remoteMap are deletions (only if strict mode is enabled)
+	if strict {
+		for _, remoteItem := range remoteMap {
+			changes = append(changes, Change{
+				Type:     ChangeTypeDelete,
+				Key:      remoteItem.Key,
+				OldValue: remoteItem.Value,
+				Label:    remoteItem.Label,
+				Tags:     remoteItem.Tags,
+			})
+		}
 	}
 
 	// Sort changes for consistent output

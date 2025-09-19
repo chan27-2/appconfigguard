@@ -151,7 +151,7 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	}
 
 	// Generate diff
-	changes, err := diffEngine.Compare(localConfig, remoteConfig)
+	changes, err := diffEngine.Compare(localConfig, remoteConfig, strict)
 	if err != nil {
 		return fmt.Errorf("failed to generate diff: %w", err)
 	}
