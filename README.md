@@ -189,6 +189,12 @@ go test ./...
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📂 Repository
+
+- **GitHub**: https://github.com/chan27-2/appconfigguard
+- **Issues**: https://github.com/chan27-2/appconfigguard/issues
+- **Discussions**: https://github.com/chan27-2/appconfigguard/discussions
+
 ## 🙏 Acknowledgments
 
 - [Azure SDK for Go](https://github.com/Azure/azure-sdk-for-go)
