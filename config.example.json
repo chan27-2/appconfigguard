@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "features": {
       "diff": true,
-      "sync": true,
+      "sync": false,
       "atomic": true
     }
   },
@@ -19,5 +19,5 @@
   "logging": {
     "level": "info"
   },
-  "features": ["authentication", "authorization", "audit"]
+  "features": ["authentication", "audit"]
 }

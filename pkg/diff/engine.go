@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/saichandankadarla/appconfigguard/pkg/azure"
 )
@@ -15,6 +16,33 @@ const (
 	ChangeTypeAdd    ChangeType = "add"
 	ChangeTypeUpdate ChangeType = "update"
 	ChangeTypeDelete ChangeType = "delete"
+)
+
+// ANSI color codes for terminal output
+const (
+	colorReset  = "\033[0m"
+	colorRed    = "\033[31m"
+	colorGreen  = "\033[32m"
+	colorYellow = "\033[33m"
+	colorBlue   = "\033[34m"
+	colorPurple = "\033[35m"
+	colorCyan   = "\033[36m"
+	colorWhite  = "\033[37m"
+	colorGray   = "\033[90m"
+
+	// Bold colors
+	colorBoldRed    = "\033[1;31m"
+	colorBoldGreen  = "\033[1;32m"
+	colorBoldYellow = "\033[1;33m"
+	colorBoldBlue   = "\033[1;34m"
+	colorBoldPurple = "\033[1;35m"
+	colorBoldCyan   = "\033[1;36m"
+	colorBoldWhite  = "\033[1;37m"
+
+	// Background colors
+	colorBgRed    = "\033[41m"
+	colorBgGreen  = "\033[42m"
+	colorBgYellow = "\033[43m"
 )
 
 // Change represents a single configuration change
@@ -33,6 +61,41 @@ type Summary struct {
 	Updated int
 	Deleted int
 	Total   int
+}
+
+// Helper functions for colored output
+func colorize(text, color string) string {
+	return color + text + colorReset
+}
+
+func bold(text string) string {
+	return "\033[1m" + text + colorReset
+}
+
+func formatChangeSymbol(changeType ChangeType) string {
+	switch changeType {
+	case ChangeTypeAdd:
+		return colorize("➕", colorBoldGreen)
+	case ChangeTypeUpdate:
+		return colorize("🔄", colorBoldYellow)
+	case ChangeTypeDelete:
+		return colorize("❌", colorBoldRed)
+	default:
+		return colorize("❓", colorGray)
+	}
+}
+
+func formatChangeType(changeType ChangeType) string {
+	switch changeType {
+	case ChangeTypeAdd:
+		return colorize("ADD", colorGreen)
+	case ChangeTypeUpdate:
+		return colorize("UPDATE", colorYellow)
+	case ChangeTypeDelete:
+		return colorize("DELETE", colorRed)
+	default:
+		return colorize("UNKNOWN", colorGray)
+	}
 }
 
 // Engine handles diff operations between local and remote configurations
@@ -120,25 +183,57 @@ func (e *Engine) GetSummary(changes []Change) Summary {
 // FormatConsole formats changes for console output with colors
 func (e *Engine) FormatConsole(changes []Change) string {
 	if len(changes) == 0 {
-		return "No changes detected."
+		return colorize("✨ No changes detected. Your configuration is up to date!", colorBoldGreen)
 	}
 
-	output := "Configuration changes:\n\n"
+	output := colorize("🔍 Configuration Changes", colorBoldCyan) + "\n"
+	output += colorize(strings.Repeat("═", 60), colorGray) + "\n\n"
 
-	for _, change := range changes {
+	for i, change := range changes {
+		// Add separator between changes
+		if i > 0 {
+			output += "\n"
+		}
+
+		symbol := formatChangeSymbol(change.Type)
+		changeType := formatChangeType(change.Type)
+		key := colorize(bold(change.Key), colorBoldBlue)
+
 		switch change.Type {
 		case ChangeTypeAdd:
-			output += fmt.Sprintf("+ %s = %s\n", change.Key, e.truncateValue(change.NewValue))
+			output += fmt.Sprintf("%s %s %s\n", symbol, changeType, key)
+			output += fmt.Sprintf("   %s %s\n", colorize("New value:", colorCyan), e.truncateValue(change.NewValue))
+
 		case ChangeTypeUpdate:
-			output += fmt.Sprintf("~ %s = %s (was: %s)\n", change.Key, e.truncateValue(change.NewValue), e.truncateValue(change.OldValue))
+			output += fmt.Sprintf("%s %s %s\n", symbol, changeType, key)
+			output += fmt.Sprintf("   %s %s\n", colorize("New value:", colorCyan), e.truncateValue(change.NewValue))
+			output += fmt.Sprintf("   %s %s\n", colorize("Old value:", colorGray), e.truncateValue(change.OldValue))
+
 		case ChangeTypeDelete:
-			output += fmt.Sprintf("- %s = %s\n", change.Key, e.truncateValue(change.OldValue))
+			output += fmt.Sprintf("%s %s %s\n", symbol, changeType, key)
+			output += fmt.Sprintf("   %s %s\n", colorize("Old value:", colorGray), e.truncateValue(change.OldValue))
 		}
 	}
 
+	// Add summary section
 	summary := e.GetSummary(changes)
-	output += fmt.Sprintf("\nSummary: %d added, %d updated, %d deleted (%d total)\n",
-		summary.Added, summary.Updated, summary.Deleted, summary.Total)
+	output += "\n" + colorize(strings.Repeat("═", 60), colorGray) + "\n"
+	output += colorize("📊 Summary", colorBoldCyan) + "\n"
+
+	if summary.Added > 0 {
+		output += fmt.Sprintf("   %s %d %s\n", colorize("➕", colorGreen), summary.Added, colorize("added", colorGreen))
+	}
+	if summary.Updated > 0 {
+		output += fmt.Sprintf("   %s %d %s\n", colorize("🔄", colorYellow), summary.Updated, colorize("updated", colorYellow))
+	}
+	if summary.Deleted > 0 {
+		output += fmt.Sprintf("   %s %d %s\n", colorize("❌", colorRed), summary.Deleted, colorize("deleted", colorRed))
+	}
+
+	output += fmt.Sprintf("\n   %s %d %s\n",
+		colorize("📈", colorBoldPurple),
+		summary.Total,
+		colorize("total changes", colorBoldPurple))
 
 	return output
 }
@@ -179,13 +274,17 @@ func (e *Engine) FormatJSON(changes []Change) ([]byte, error) {
 	return json.MarshalIndent(output, "", "  ")
 }
 
-// truncateValue truncates long values for display
+// truncateValue truncates long values for display with better formatting
 func (e *Engine) truncateValue(value string) string {
-	maxLen := 50
+	maxLen := 80 // Increased from 50 for better readability
 	if len(value) <= maxLen {
-		return value
+		return colorize(`"`+value+`"`, colorWhite)
 	}
-	return value[:maxLen] + "..."
+
+	// Show first part and indicate truncation
+	truncated := value[:maxLen-3] + "..."
+	return colorize(`"`+truncated+`"`, colorWhite) +
+		   colorize(fmt.Sprintf(" (%d chars total)", len(value)), colorGray)
 }
 
 // HasChanges returns true if there are any changes

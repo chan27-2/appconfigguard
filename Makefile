@@ -58,7 +58,8 @@ setup-auth-cli:
 	@echo "  az login"
 	@echo "  az account set --subscription <your-subscription-id>"
 	@echo ""
-	@echo "Then run: make demo"
+	@echo "✅ Azure CLI authentication is now ready!"
+	@echo "   The demo will automatically use this authentication."
 
 # Setup authentication using access keys (recommended for production)
 setup-auth-keys:
@@ -73,28 +74,38 @@ setup-auth-keys:
 
 # Check authentication status
 auth-check:
-	@echo "🔍 Checking authentication..."
+	@echo "🔍 Checking authentication methods..."
 	@if [ -n "$$APP_CONFIG_CONNECTION_STRING" ]; then \
-		echo "✅ Access Key authentication configured"; \
+		echo "✅ Access Key authentication: Configured"; \
+		echo "   APP_CONFIG_CONNECTION_STRING is set"; \
 	else \
-		echo "⚠️  No APP_CONFIG_CONNECTION_STRING set"; \
-		az account show --query "name" 2>/dev/null && echo "✅ Azure CLI authentication available" || echo "❌ No authentication configured"; \
+		echo "⚠️  Access Key authentication: Not configured"; \
+		if az account show --query "name" 2>/dev/null >/dev/null; then \
+			echo "✅ Azure CLI authentication: Available"; \
+			az account show --query "name" --output tsv | xargs echo "   Logged in as:"; \
+		else \
+			echo "❌ Azure CLI authentication: Not available (run 'az login')"; \
+		fi; \
 	fi
+	@echo ""
+	@echo "💡 The app will automatically try these methods in order:"
 
 # =============================================================================
 # DEMO TARGETS
 # =============================================================================
 
-# Quick demo with Azure CLI auth
-demo: build auth-check
+# Quick demo with automatic authentication
+demo: build
 	@echo ""
 	@echo "🚀 Running demo with $(EXAMPLE_CONFIG)..."
-	@if [ -n "$$APP_CONFIG_CONNECTION_STRING" ]; then \
-		./$(BINARY_PATH) --file=$(EXAMPLE_CONFIG) --endpoint=$(APP_CONFIG_ENDPOINT); \
-	else \
-		./$(BINARY_PATH) --file=$(EXAMPLE_CONFIG) --endpoint=$(APP_CONFIG_ENDPOINT) 2>/dev/null || \
-		(echo "❌ Authentication failed. Run 'make setup-auth-cli' or 'make setup-auth-keys' first."; exit 1); \
-	fi
+	@echo "📍 Using endpoint: $(APP_CONFIG_ENDPOINT)"
+	@echo "📄 Using config: $(EXAMPLE_CONFIG)"
+	@echo ""
+	@./$(BINARY_PATH) --file=$(EXAMPLE_CONFIG) --endpoint=$(APP_CONFIG_ENDPOINT) || \
+	(echo ""; echo "❌ Demo failed. Make sure you're authenticated:"; \
+	 echo "   • Azure CLI: Run 'az login'"; \
+	 echo "   • Access Key: Set APP_CONFIG_CONNECTION_STRING"; \
+	 echo "   • See 'make help' for more options"; exit 1)
 
 # Demo with access key auth
 demo-keys: build
@@ -167,7 +178,7 @@ help:
 	@echo ""
 	@echo "QUICK START:"
 	@echo "  1. make build                    # Build the tool"
-	@echo "  2. make setup-auth-cli          # Setup Azure CLI auth (or setup-auth-keys)"
+	@echo "  2. az login                      # Login to Azure (optional)"
 	@echo "  3. make demo                     # Run a demo"
 	@echo ""
 	@echo "ESSENTIAL COMMANDS:"
