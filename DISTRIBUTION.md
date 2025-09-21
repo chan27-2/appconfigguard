@@ -131,7 +131,7 @@ docker run --rm -e APP_CONFIG_CONNECTION_STRING="your-connection-string" chan27-
 **Setup required**:
 
 1. **Winget**: Manifests are automatically submitted via GoReleaser
-2. **Scoop**: Create repository `chan27-2/scoop-appconfigguard` for the bucket
+2. **Scoop**: Create repository `chan27-2/appconfigguard` for the bucket
 
 ## 📋 Release Process
 
@@ -223,7 +223,7 @@ Each release automatically includes:
 
 1. **Create your first release**: Try `make release-tag VERSION=v0.1.0`
 2. **Set up Homebrew tap**: Create the repository and enable automated publishing
-3. **Set up Scoop bucket**: Create repository `chan27-2/scoop-appconfigguard` for Scoop manifests
+3. **Set up Scoop bucket**: Create repository `chan27-2/appconfigguard` for Scoop manifests
 4. **Test Docker builds**: Try `make release-snapshot` to test Docker image creation
 5. **Test Linux packages**: Verify package installation works on target distributions
 

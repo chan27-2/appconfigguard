@@ -92,7 +92,7 @@ nfpms:
 scoops:
   - repository:
       owner: chan27-2
-      name: scoop-appconfigguard
+      name: appconfigguard
     homepage: https://github.com/chan27-2/appconfigguard
     description: "A Go-based CLI tool for safely managing Azure App Configuration"
     license: MIT
