@@ -1,8 +1,6 @@
 module github.com/chan27-2/appconfigguard
 
-go 1.23.0
-
-toolchain go1.24.3
+go 1.25.0
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.1
