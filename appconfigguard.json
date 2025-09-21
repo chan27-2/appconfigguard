@@ -1,0 +1,22 @@
+{
+    "version": "0.1.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_x86_64.zip",
+            "bin": [
+                "appconfigguard.exe"
+            ],
+            "hash": "b2b258027d6389dba6f7a612625707b27c46f506b0124142b5bc8acf704b2dda"
+        },
+        "arm64": {
+            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_arm64.zip",
+            "bin": [
+                "appconfigguard.exe"
+            ],
+            "hash": "8b36b2e99fda9533498e346ddf7de390b223cc585bedc7641e919fd727173b01"
+        }
+    },
+    "homepage": "https://github.com/chan27-2/appconfigguard",
+    "license": "MIT",
+    "description": "A Go-based CLI tool for safely managing Azure App Configuration"
+}
