@@ -143,12 +143,14 @@ make build
 # Binary will be available at ./bin/appconfigguard
 ```
 
-### Option 4: Homebrew (macOS - Coming Soon)
+### Option 4: Homebrew (macOS)
 
 ```bash
-# Once the Homebrew tap is set up:
-brew install chan27-2/tap/appconfigguard
+brew tap chan27-2/appconfigguard
+brew install appconfigguard
 ```
+
+_Note: Homebrew formulae are automatically maintained via GoReleaser._
 
 ### Option 5: Linux Package Managers
 
@@ -177,15 +179,18 @@ docker run --rm chan27-2/appconfigguard --help
 docker run --rm -v ~/.azure:/root/.azure chan27-2/appconfigguard --file config.json --endpoint https://example.azconfig.io
 ```
 
-### Option 7: Windows Package Managers (Coming Soon)
+### Option 7: Windows Package Managers
 
 ```bash
 # Winget
 winget install chan27-2.appconfigguard
 
 # Scoop
+scoop bucket add chan27-2 https://github.com/chan27-2/appconfigguard
 scoop install appconfigguard
 ```
+
+_Note: Winget and Scoop manifests are automatically maintained via GoReleaser._
 
 ## 🔐 Authentication
 

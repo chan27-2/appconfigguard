@@ -50,20 +50,19 @@ release:
   github:
     owner: chan27-2
     name: appconfigguard
-# Homebrew tap (uncomment and configure once homebrew-appconfigguard repo is created)
-# brews:
-#   - name: appconfigguard
-#     github:
-#       owner: chan27-2
-#       name: homebrew-appconfigguard
-#     commit_author:
-#       name: goreleaserbot
-#       email: goreleaser@carlosbecker.com
-#     folder: Formula
-#     homepage: https://github.com/chan27-2/appconfigguard
-#     description: "A Go-based CLI tool for safely managing Azure App Configuration"
-#     test: |
-#       system "#{bin}/appconfigguard --version"
+# Homebrew tap
+brews:
+  - name: appconfigguard
+    repository:
+      owner: chan27-2
+      name: appconfigguard
+    commit_author:
+      name: goreleaserbot
+      email: goreleaser@carlosbecker.com
+    homepage: https://github.com/chan27-2/appconfigguard
+    description: "A Go-based CLI tool for safely managing Azure App Configuration"
+    test: |
+      system "#{bin}/appconfigguard --version"
 
 # Linux packages (DEB and RPM)
 nfpms:

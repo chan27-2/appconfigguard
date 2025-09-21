@@ -4,7 +4,7 @@ This is the Homebrew tap for [AppConfigGuard](https://github.com/chan27-2/appcon
 
 ## Setup Instructions
 
-1. Create a new GitHub repository for the tap: `homebrew-appconfigguard`
+1. Create a new GitHub repository for the tap: `appconfigguard` (under your GitHub account/org)
 2. Copy the `appconfigguard.rb` formula to the repository
 3. Update the version and SHA256 hash when creating releases
 

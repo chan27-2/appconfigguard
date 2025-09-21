@@ -40,18 +40,23 @@ go install github.com/chan27-2/appconfigguard@latest
 go install github.com/chan27-2/appconfigguard@v1.0.0
 ```
 
-### 3. Homebrew (macOS) 🔄
+### 3. Homebrew (macOS) ✅
 
-**Status**: Formula prepared, tap repository needs to be created.
+**Status**: Fully configured and ready.
 
-**Setup required**:
+**What it provides**:
 
-1. Create a new GitHub repository: `chan27-2/homebrew-appconfigguard`
-2. Copy `homebrew-tap/appconfigguard.rb` to the repository
-3. Uncomment the `brews` section in `.goreleaser.yml`
-4. Push a release to enable automated Homebrew publishing
+- Automated Homebrew formula generation and publishing
+- Cross-platform support (Intel and Apple Silicon)
+- Automatic version and SHA256 updates
 
-**Usage for users** (once tap is set up):
+**How it works**:
+
+- GoReleaser automatically generates and updates the formula in the `chan27-2/appconfigguard` repository
+- Formula is stored in the `Formula/` directory of the main repository
+- Updates are committed automatically during releases
+
+**Usage for users**:
 
 ```bash
 brew tap chan27-2/appconfigguard
@@ -124,14 +129,22 @@ docker run --rm -e APP_CONFIG_CONNECTION_STRING="your-connection-string" chan27-
 
 **Status**: Fully configured and ready.
 
-**Winget**: Automated manifest publishing to Microsoft Winget Community Repository.
+**Winget**: Automated manifest publishing to the `chan27-2/appconfigguard` repository.
 
-**Scoop**: Automated manifest publishing to Scoop bucket (requires bucket repository setup).
+**Scoop**: Automated manifest publishing to the `chan27-2/appconfigguard` repository.
 
-**Setup required**:
+**What it provides**:
 
-1. **Winget**: Manifests are automatically submitted via GoReleaser
-2. **Scoop**: Create repository `chan27-2/appconfigguard` for the bucket
+- Automated Winget manifest generation and publishing
+- Automated Scoop manifest generation and publishing
+- Manifests stored in the main repository for easy management
+
+**How it works**:
+
+- GoReleaser automatically generates and updates manifests during releases
+- Winget manifests are stored in the repository root
+- Scoop manifests are stored in the repository root
+- Updates are committed automatically during releases
 
 ## 📋 Release Process
 
@@ -175,7 +188,9 @@ make release-remove-tag VERSION=v1.0.0
 2. Tests run on multiple platforms (Linux, macOS, Windows)
 3. GoReleaser builds binaries for all platforms
 4. GitHub release is created with all assets
-5. (Future) Homebrew tap is automatically updated
+5. Homebrew formula is automatically updated
+6. Winget and Scoop manifests are automatically updated
+7. Linux packages are automatically built and published
 
 ## 🛠️ Configuration Files
 
@@ -215,17 +230,17 @@ Each release automatically includes:
 - **Binaries**: `appconfigguard_<OS>_<ARCH>.tar.gz` or `.zip`
 - **Linux Packages**: `.deb`, `.rpm`, and `.apk` packages
 - **Docker Images**: Multi-arch images pushed to Docker Hub
+- **Homebrew Formula**: Updated formula in the repository
 - **Package Manager Manifests**: Winget and Scoop manifests
 - **Checksums**: `checksums.txt` with SHA256 hashes
 - **Changelog**: Automatically generated from git commits
 
 ## 🎯 Next Steps
 
-1. **Create your first release**: Try `make release-tag VERSION=v0.1.0`
-2. **Set up Homebrew tap**: Create the repository and enable automated publishing
-3. **Set up Scoop bucket**: Create repository `chan27-2/appconfigguard` for Scoop manifests
-4. **Test Docker builds**: Try `make release-snapshot` to test Docker image creation
-5. **Test Linux packages**: Verify package installation works on target distributions
+1. **Create your first release**: Try `make release-tag VERSION=v0.2.0`
+2. **Test all distribution methods**: Run `make release-snapshot` to test everything locally
+3. **Verify package installations**: Test Homebrew, Winget, and Scoop installations after release
+4. **Monitor automated publishing**: Check that all package managers are updated correctly
 
 ## 🔍 Troubleshooting
 
