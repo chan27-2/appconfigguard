@@ -196,16 +196,16 @@ release: install-goreleaser
 # Check if release would work
 release-check: install-goreleaser
 	@echo "🔍 Checking release configuration..."
-	goreleaser check
+	PATH="$(PATH):$(shell go env GOPATH)/bin" goreleaser check
 
 # Create a new release using the release script
-release-tag:
+release-tag: install-goreleaser
 	@echo "🏷️  Creating a new release tag..."
 	@if [ -z "$$VERSION" ]; then \
 		echo "❌ VERSION not set. Usage: make release-tag VERSION=v1.2.3"; \
 		exit 1; \
 	fi
-	./scripts/release.sh $(VERSION)
+	PATH="$(PATH):$(shell go env GOPATH)/bin" ./scripts/release.sh $(VERSION)
 
 # =============================================================================
 # HELP
