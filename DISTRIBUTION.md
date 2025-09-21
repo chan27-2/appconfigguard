@@ -158,6 +158,17 @@ git tag -a v1.0.0 -m "Release v1.0.0"
 git push origin v1.0.0
 ```
 
+#### Option C: Remove a release tag
+
+If you need to remove a tag (e.g., if there was an error or you want to recreate it):
+
+```bash
+# Remove a tag locally and remotely
+make release-remove-tag VERSION=v1.0.0
+# Or using the script directly
+./scripts/release.sh --remove v1.0.0
+```
+
 ### Automated Release Flow
 
 1. Git tag is pushed → GitHub Actions triggers
@@ -188,6 +199,9 @@ make release-snapshot
 
 # Create a new release tag
 make release-tag VERSION=v1.0.0
+
+# Remove a release tag
+make release-remove-tag VERSION=v1.0.0
 
 # Manual release (requires GITHUB_TOKEN)
 export GITHUB_TOKEN=your_token_here

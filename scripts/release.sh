@@ -27,15 +27,41 @@ print_error() {
 # Check if version is provided
 if [ $# -eq 0 ]; then
     print_error "Please provide a version number (e.g., ./release.sh v1.0.0)"
+    print_error "Or use --remove flag: ./release.sh --remove v1.0.0"
     exit 1
 fi
 
-VERSION=$1
+# Check for remove flag
+if [ "$1" = "--remove" ]; then
+    if [ $# -lt 2 ]; then
+        print_error "Please provide a version number to remove (e.g., ./release.sh --remove v1.0.0)"
+        exit 1
+    fi
+    VERSION=$2
+    REMOVE_TAG=true
+else
+    VERSION=$1
+    REMOVE_TAG=false
+fi
 
 # Validate version format
 if [[ ! $VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     print_error "Version must be in format v1.2.3 (got: $VERSION)"
     exit 1
+fi
+
+# Handle tag removal
+if [ "$REMOVE_TAG" = true ]; then
+    print_status "Removing tag $VERSION"
+
+    print_status "Removing local tag $VERSION..."
+    git tag -d "$VERSION" 2>/dev/null || print_warning "Local tag $VERSION not found or already removed"
+
+    print_status "Removing remote tag $VERSION..."
+    git push origin :refs/tags/"$VERSION" 2>/dev/null || print_warning "Remote tag $VERSION not found or already removed"
+
+    print_status "Tag $VERSION removed successfully!"
+    exit 0
 fi
 
 print_status "Creating release $VERSION"

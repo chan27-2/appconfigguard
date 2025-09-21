@@ -207,6 +207,19 @@ release-tag: install-goreleaser
 	fi
 	PATH="$(PATH):$(shell go env GOPATH)/bin" ./scripts/release.sh $(VERSION)
 
+# Remove a release tag locally and remotely
+release-remove-tag:
+	@echo "🗑️  Removing release tag..."
+	@if [ -z "$$VERSION" ]; then \
+		echo "❌ VERSION not set. Usage: make release-remove-tag VERSION=v1.2.3"; \
+		exit 1; \
+	fi
+	@echo "Removing local tag $(VERSION)..."
+	git tag -d $(VERSION) 2>/dev/null || echo "Local tag $(VERSION) not found or already removed"
+	@echo "Removing remote tag $(VERSION)..."
+	git push origin :refs/tags/$(VERSION) 2>/dev/null || echo "Remote tag $(VERSION) not found or already removed"
+	@echo "✅ Tag $(VERSION) removed successfully"
+
 # =============================================================================
 # HELP
 # =============================================================================
@@ -239,10 +252,11 @@ help:
 	@echo "  deps           - Download dependencies"
 	@echo ""
 	@echo "RELEASE & DISTRIBUTION:"
-	@echo "  release-check    - Check release configuration"
-	@echo "  release-snapshot - Create test release locally"
-	@echo "  release-tag      - Create and push a new release tag"
-	@echo "  release          - Create full GitHub release (manual)"
+	@echo "  release-check       - Check release configuration"
+	@echo "  release-snapshot    - Create test release locally"
+	@echo "  release-tag         - Create and push a new release tag"
+	@echo "  release-remove-tag  - Remove a release tag locally and remotely"
+	@echo "  release             - Create full GitHub release (manual)"
 	@echo ""
 	@echo "CONFIGURATION:"
 	@echo "  Set these variables to customize:"
