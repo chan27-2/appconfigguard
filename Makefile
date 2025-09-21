@@ -170,6 +170,44 @@ fmt:
 	$(GOCMD) fmt ./...
 
 # =============================================================================
+# RELEASE TARGETS
+# =============================================================================
+
+# Install GoReleaser
+install-goreleaser:
+	@echo "📦 Installing GoReleaser..."
+	$(GOCMD) install github.com/goreleaser/goreleaser@latest
+
+# Create a snapshot release (for testing)
+release-snapshot: install-goreleaser
+	@echo "📸 Creating release snapshot..."
+	goreleaser release --snapshot --clean
+
+# Create a full release (requires GITHUB_TOKEN)
+release: install-goreleaser
+	@echo "🚀 Creating full release..."
+	@if [ -z "$$GITHUB_TOKEN" ]; then \
+		echo "❌ GITHUB_TOKEN not set. Please set it first:"; \
+		echo "   export GITHUB_TOKEN=your_github_token_here"; \
+		exit 1; \
+	fi
+	goreleaser release --clean
+
+# Check if release would work
+release-check: install-goreleaser
+	@echo "🔍 Checking release configuration..."
+	goreleaser check
+
+# Create a new release using the release script
+release-tag:
+	@echo "🏷️  Creating a new release tag..."
+	@if [ -z "$$VERSION" ]; then \
+		echo "❌ VERSION not set. Usage: make release-tag VERSION=v1.2.3"; \
+		exit 1; \
+	fi
+	./scripts/release.sh $(VERSION)
+
+# =============================================================================
 # HELP
 # =============================================================================
 
@@ -199,6 +237,12 @@ help:
 	@echo "  lint           - Lint the code"
 	@echo "  fmt            - Format code"
 	@echo "  deps           - Download dependencies"
+	@echo ""
+	@echo "RELEASE & DISTRIBUTION:"
+	@echo "  release-check    - Check release configuration"
+	@echo "  release-snapshot - Create test release locally"
+	@echo "  release-tag      - Create and push a new release tag"
+	@echo "  release          - Create full GitHub release (manual)"
 	@echo ""
 	@echo "CONFIGURATION:"
 	@echo "  Set these variables to customize:"

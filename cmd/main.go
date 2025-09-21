@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/cli"
+	"github.com/chan27-2/appconfigguard/pkg/cli"
 )
 
 func main() {

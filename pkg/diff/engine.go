@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/azure"
+	"github.com/chan27-2/appconfigguard/pkg/azure"
 )
 
 // ChangeType represents the type of change

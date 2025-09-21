@@ -1,4 +1,4 @@
-module github.com/saichandankadarla/appconfigguard
+module github.com/chan27-2/appconfigguard
 
 go 1.24.3
 

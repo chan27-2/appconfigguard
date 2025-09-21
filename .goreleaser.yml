@@ -1,0 +1,166 @@
+# Build customization
+builds:
+  - main: ./cmd
+    binary: appconfigguard
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+# Archive customization
+archives:
+  - name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+
+# Checksum customization
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+# Changelog customization
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+# Release customization
+release:
+  name_template: "{{.Tag}}"
+  github:
+    owner: chan27-2
+    name: appconfigguard
+# Homebrew tap (uncomment and configure once homebrew-appconfigguard repo is created)
+# brews:
+#   - name: appconfigguard
+#     github:
+#       owner: chan27-2
+#       name: homebrew-appconfigguard
+#     commit_author:
+#       name: goreleaserbot
+#       email: goreleaser@carlosbecker.com
+#     folder: Formula
+#     homepage: https://github.com/chan27-2/appconfigguard
+#     description: "A Go-based CLI tool for safely managing Azure App Configuration"
+#     test: |
+#       system "#{bin}/appconfigguard --version"
+
+# Linux packages (DEB and RPM)
+nfpms:
+  - file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://github.com/chan27-2/appconfigguard
+    description: "A Go-based CLI tool for safely managing Azure App Configuration"
+    maintainer: chan27-2
+    license: MIT
+    formats:
+      - deb
+      - rpm
+      - apk
+    dependencies:
+      - ca-certificates
+    contents:
+      - src: ./README.md
+        dst: /usr/share/doc/appconfigguard/README.md
+      - src: ./config.example.json
+        dst: /usr/share/doc/appconfigguard/config.example.json
+        type: config
+    scripts:
+      postinstall: "./scripts/postinstall.sh"
+      preremove: "./scripts/preremove.sh"
+
+# Docker images
+dockers:
+  - image_templates:
+      - "chan27-2/appconfigguard:{{ .Tag }}-amd64"
+      - "chan27-2/appconfigguard:latest-amd64"
+      - "chan27-2/appconfigguard:{{ .Version }}-amd64"
+    goos: linux
+    goarch: amd64
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=A Go-based CLI tool for safely managing Azure App Configuration"
+      - "--label=org.opencontainers.image.url=https://github.com/chan27-2/appconfigguard"
+      - "--label=org.opencontainers.image.source=https://github.com/chan27-2/appconfigguard"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=MIT"
+    dockerfile: Dockerfile
+    extra_files:
+      - config.example.json
+
+  - image_templates:
+      - "chan27-2/appconfigguard:{{ .Tag }}-arm64"
+      - "chan27-2/appconfigguard:latest-arm64"
+      - "chan27-2/appconfigguard:{{ .Version }}-arm64"
+    goos: linux
+    goarch: arm64
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=A Go-based CLI tool for safely managing Azure App Configuration"
+      - "--label=org.opencontainers.image.url=https://github.com/chan27-2/appconfigguard"
+      - "--label=org.opencontainers.image.source=https://github.com/chan27-2/appconfigguard"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=MIT"
+    dockerfile: Dockerfile
+    extra_files:
+      - config.example.json
+
+# Docker manifest for multi-arch support
+docker_manifests:
+  - name_template: "chan27-2/appconfigguard:{{ .Tag }}"
+    image_templates:
+      - "chan27-2/appconfigguard:{{ .Tag }}-amd64"
+      - "chan27-2/appconfigguard:{{ .Tag }}-arm64"
+  - name_template: "chan27-2/appconfigguard:latest"
+    image_templates:
+      - "chan27-2/appconfigguard:latest-amd64"
+      - "chan27-2/appconfigguard:latest-arm64"
+  - name_template: "chan27-2/appconfigguard:{{ .Version }}"
+    image_templates:
+      - "chan27-2/appconfigguard:{{ .Version }}-amd64"
+      - "chan27-2/appconfigguard:{{ .Version }}-arm64"
+
+# Scoop manifest (for Windows users)
+scoops:
+  - repository:
+      owner: chan27-2
+      name: scoop-appconfigguard
+    homepage: https://github.com/chan27-2/appconfigguard
+    description: "A Go-based CLI tool for safely managing Azure App Configuration"
+    license: MIT
+
+# Winget manifest (for Windows users)
+winget:
+  - name: AppConfigGuard
+    publisher: chan27-2
+    package_identifier: chan27-2.appconfigguard
+    short_description: "A Go-based CLI tool for safely managing Azure App Configuration"
+    homepage: https://github.com/chan27-2/appconfigguard
+    license: MIT

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/validator"
+	"github.com/chan27-2/appconfigguard/pkg/validator"
 )
 
 // Flattener handles JSON flattening and unflattening operations

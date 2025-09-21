@@ -114,16 +114,77 @@ Implemented in Go for portability and performance. Distributed as a single stati
 
 ## 🚀 Installation
 
-### Download Binary
+### Option 1: Download Pre-built Binaries (Recommended)
 
-Download the latest release from the [releases page](https://github.com/saichandankadarla/appconfigguard/releases).
+Download the latest release for your platform from the [GitHub Releases page](https://github.com/chan27-2/appconfigguard/releases).
 
-### Build from Source
+Supported platforms:
+
+- **Linux**: `appconfigguard_Linux_x86_64.tar.gz`
+- **macOS**: `appconfigguard_Darwin_x86_64.tar.gz` or `appconfigguard_Darwin_arm64.tar.gz`
+- **Windows**: `appconfigguard_Windows_x86_64.zip`
+
+### Option 2: Install via Go (for Go developers)
+
+If you have Go 1.21+ installed:
 
 ```bash
-git clone https://github.com/saichandankadarla/appconfigguard.git
+go install github.com/chan27-2/appconfigguard@latest
+```
+
+This will install the latest version to your `$GOPATH/bin`.
+
+### Option 3: Build from Source
+
+```bash
+git clone https://github.com/chan27-2/appconfigguard.git
 cd appconfigguard
-go build -o bin/appconfigguard ./cmd
+make build
+# Binary will be available at ./bin/appconfigguard
+```
+
+### Option 4: Homebrew (macOS - Coming Soon)
+
+```bash
+# Once the Homebrew tap is set up:
+brew install chan27-2/tap/appconfigguard
+```
+
+### Option 5: Linux Package Managers
+
+Install via native package managers:
+
+```bash
+# Ubuntu/Debian
+sudo apt install ./appconfigguard_*.deb
+
+# Fedora/CentOS/RHEL
+sudo dnf install ./appconfigguard_*.rpm
+
+# Alpine Linux
+sudo apk add --allow-untrusted appconfigguard_*.apk
+```
+
+### Option 6: Docker
+
+Run via container:
+
+```bash
+# Pull and run
+docker run --rm chan27-2/appconfigguard --help
+
+# With Azure CLI auth
+docker run --rm -v ~/.azure:/root/.azure chan27-2/appconfigguard --file config.json --endpoint https://example.azconfig.io
+```
+
+### Option 7: Windows Package Managers (Coming Soon)
+
+```bash
+# Winget
+winget install chan27-2.appconfigguard
+
+# Scoop
+scoop install appconfigguard
 ```
 
 ## 🔐 Authentication
@@ -173,7 +234,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ### Development Setup
 
 ```bash
-git clone https://github.com/saichandankadarla/appconfigguard.git
+git clone https://github.com/chan27-2/appconfigguard.git
 cd appconfigguard
 go mod download
 go build -o bin/appconfigguard ./cmd

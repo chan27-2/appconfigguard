@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/azure"
-	jsonpkg "github.com/saichandankadarla/appconfigguard/pkg/json"
+	"github.com/chan27-2/appconfigguard/pkg/azure"
+	jsonpkg "github.com/chan27-2/appconfigguard/pkg/json"
 	"github.com/spf13/cobra"
 )
 

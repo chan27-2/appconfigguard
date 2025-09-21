@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/azure"
-	"github.com/saichandankadarla/appconfigguard/pkg/diff"
+	"github.com/chan27-2/appconfigguard/pkg/azure"
+	"github.com/chan27-2/appconfigguard/pkg/diff"
 )
 
 // Engine handles synchronization operations

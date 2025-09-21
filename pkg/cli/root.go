@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/saichandankadarla/appconfigguard/pkg/azure"
-	"github.com/saichandankadarla/appconfigguard/pkg/diff"
-	jsonpkg "github.com/saichandankadarla/appconfigguard/pkg/json"
-	"github.com/saichandankadarla/appconfigguard/pkg/sync"
+	"github.com/chan27-2/appconfigguard/pkg/azure"
+	"github.com/chan27-2/appconfigguard/pkg/diff"
+	jsonpkg "github.com/chan27-2/appconfigguard/pkg/json"
+	"github.com/chan27-2/appconfigguard/pkg/sync"
 	"github.com/spf13/cobra"
 )
 
