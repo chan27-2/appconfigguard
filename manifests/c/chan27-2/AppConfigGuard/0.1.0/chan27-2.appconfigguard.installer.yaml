@@ -12,7 +12,7 @@ Installers:
       - RelativeFilePath: appconfigguard.exe
         PortableCommandAlias: appconfigguard
     InstallerUrl: https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_arm64.zip
-    InstallerSha256: 1194447fd90bf27082a1eeaa9ae3f63e5280351f9ef6cc18a85eaa0bfa37223b
+    InstallerSha256: 8b36b2e99fda9533498e346ddf7de390b223cc585bedc7641e919fd727173b01
     UpgradeBehavior: uninstallPrevious
   - Architecture: x64
     NestedInstallerType: portable
@@ -20,7 +20,7 @@ Installers:
       - RelativeFilePath: appconfigguard.exe
         PortableCommandAlias: appconfigguard
     InstallerUrl: https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_x86_64.zip
-    InstallerSha256: 7d1786c0bb2f7bca80600c98a1d7a00ac50baff831b944739207a436462cdc8f
+    InstallerSha256: b2b258027d6389dba6f7a612625707b27c46f506b0124142b5bc8acf704b2dda
     UpgradeBehavior: uninstallPrevious
 ManifestType: installer
 ManifestVersion: 1.6.0
