@@ -109,6 +109,8 @@ dockers:
       - "--label=org.opencontainers.image.licenses=MIT"
     dockerfile: Dockerfile
     extra_files:
+      - go.mod
+      - go.sum
       - config.example.json
 
   - image_templates:
@@ -130,6 +132,8 @@ dockers:
       - "--label=org.opencontainers.image.licenses=MIT"
     dockerfile: Dockerfile
     extra_files:
+      - go.mod
+      - go.sum
       - config.example.json
 
 # Docker manifest for multi-arch support
@@ -158,7 +162,10 @@ scoops:
 
 # Winget manifest (for Windows users)
 winget:
-  - name: AppConfigGuard
+  - repository:
+      owner: chan27-2
+      name: appconfigguard
+    name: AppConfigGuard
     publisher: chan27-2
     package_identifier: chan27-2.appconfigguard
     short_description: "A Go-based CLI tool for safely managing Azure App Configuration"
