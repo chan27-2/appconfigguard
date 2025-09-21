@@ -76,7 +76,10 @@ EXAMPLES:
   appconfigguard --file=config.json --endpoint=https://mystorage.azconfig.io --ci --output=json
 
   # Use specific label
-  appconfigguard --file=config.json --endpoint=https://mystorage.azconfig.io --label=production`,
+  appconfigguard --file=config.json --endpoint=https://mystorage.azconfig.io --label=production
+
+  # Download configuration from Azure
+  appconfigguard download --endpoint=https://mystorage.azconfig.io --output=config.json`,
 	RunE: runRoot,
 }
 
@@ -98,6 +101,9 @@ func init() {
 
 	rootCmd.MarkFlagRequired("file")
 	rootCmd.MarkFlagRequired("endpoint")
+
+	// Add subcommands
+	rootCmd.AddCommand(downloadCmd)
 }
 
 func runRoot(cmd *cobra.Command, args []string) error {
