@@ -98,7 +98,6 @@ dockers:
     goarch: amd64
     use: buildx
     build_flag_templates:
-      - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.description=A Go-based CLI tool for safely managing Azure App Configuration"
       - "--label=org.opencontainers.image.url=https://github.com/chan27-2/appconfigguard"
@@ -121,7 +120,6 @@ dockers:
     goarch: arm64
     use: buildx
     build_flag_templates:
-      - "--platform=linux/arm64"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.description=A Go-based CLI tool for safely managing Azure App Configuration"
       - "--label=org.opencontainers.image.url=https://github.com/chan27-2/appconfigguard"
