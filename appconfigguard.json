@@ -1,19 +1,19 @@
 {
-    "version": "0.1.0",
+    "version": "0.1.2",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_x86_64.zip",
+            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.2/appconfigguard_Windows_x86_64.zip",
             "bin": [
                 "appconfigguard.exe"
             ],
-            "hash": "b2b258027d6389dba6f7a612625707b27c46f506b0124142b5bc8acf704b2dda"
+            "hash": "c1ac787aa3d4364cc4f30224b624fed4104e6c629e6e541f46d68834ba3eb719"
         },
         "arm64": {
-            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.0/appconfigguard_Windows_arm64.zip",
+            "url": "https://github.com/chan27-2/appconfigguard/releases/download/v0.1.2/appconfigguard_Windows_arm64.zip",
             "bin": [
                 "appconfigguard.exe"
             ],
-            "hash": "8b36b2e99fda9533498e346ddf7de390b223cc585bedc7641e919fd727173b01"
+            "hash": "44ae36cff9e6039ae1825942624a50288567e92c59ea8fdded126b602e071423"
         }
     },
     "homepage": "https://github.com/chan27-2/appconfigguard",
